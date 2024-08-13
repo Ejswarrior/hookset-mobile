@@ -1,18 +1,23 @@
-package ui.components
+package ui.components.HooksetInput
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 
-public class HooksetInput constructor(val modifier: Modifier) {
 
-    var inputValue: String = ""
+public class HooksetInput (val modifier: Modifier) {
+
+    var inputValue: MutableState<String> = remember { mutableStateOf("")}
         private set
-        public get
 
     fun onChangeInput(newStringValue: String) {
-        inputValue = newStringValue;
+        Log.d("input", inputValue)
+        inputValue += newStringValue
     }
 
     @Composable
