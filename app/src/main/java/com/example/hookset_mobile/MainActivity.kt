@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hookset_mobile.ui.theme.Hookset_mobileTheme
+import ui.components.HooksetButton
 import ui.components.HooksetInput.HooksetInput
 
 class MainActivity : ComponentActivity() {
@@ -42,26 +45,30 @@ fun inputString(changeString: String): String {
 
 @Composable
 fun HooksetApp(modifier: Modifier = Modifier) {
-    Surface(modifier = modifier
+    Surface(modifier = modifier.background(color = Color.White)
         .padding(vertical = 24.dp, horizontal = 24.dp)
         .fillMaxWidth()
         .fillMaxHeight(), color = Color.White) {
-        Row(modifier = Modifier,verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Center) {
-            Text(
-                text = "Login to Fishopedia",
-                color = Color.Black,
-                fontSize = 36.sp,
-                modifier = Modifier
-            )
+        Column{
+            Row(modifier = Modifier.padding(bottom = 85.dp),verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Center) {
+                Text(
+                    text = "Login to Fishopedia",
+                    color = Color.Black,
+                    fontSize = 36.sp,
+                    modifier = Modifier
+                )
+            }
+            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    HooksetInput(modifier).HooktsetTextField("Email")
 
-        }
-        Row(Modifier, verticalAlignment = Alignment.CenterVertically) {
-            HooksetInput(modifier).HooktsetTextField()
+                    HooksetInput(modifier).HooktsetTextField("Password")
+                    HooksetButton(modifier).button(variant = "primary", buttonText = "Login") {
 
+                    }
+            }
         }
-        Row {
-            HooksetInput(modifier).HooktsetTextField()
-        }
+
+
     }
 }
 
