@@ -1,10 +1,12 @@
 package com.example.hookset_mobile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,18 +41,15 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-fun inputString(changeString: String): String {
-    return changeString
-}
-
 @Composable
 fun HooksetApp(modifier: Modifier = Modifier) {
-    Surface(modifier = modifier.background(color = Color.White)
+    Surface(modifier = modifier
+        .background(color = Color.White)
         .padding(vertical = 24.dp, horizontal = 24.dp)
         .fillMaxWidth()
         .fillMaxHeight(), color = Color.White) {
         Column{
-            Row(modifier = Modifier.padding(bottom = 85.dp),verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.Center) {
+            Row(modifier = Modifier.padding(bottom = 85.dp),verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.End) {
                 Text(
                     text = "Login to Fishopedia",
                     color = Color.Black,
@@ -62,10 +61,15 @@ fun HooksetApp(modifier: Modifier = Modifier) {
                     HooksetInput(modifier).HooktsetTextField("Email")
 
                     HooksetInput(modifier).HooktsetTextField("Password")
-                    HooksetButton(modifier).button(variant = "primary", buttonText = "Login") {
-
+                    Row(modifier = Modifier.padding(top = 24.dp)) {
+                        HooksetButton(modifier).button(variant = "primary", buttonText = "Login") {
                     }
+                }
             }
+
+            Column(Modifier.fillMaxWidth().padding(top = 125.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Forgot Password? Click Here.", fontSize = 16.sp, color = Color.Blue, modifier = Modifier.clickable { Log.d("textClick", "clicked") })
+            }   
         }
 
 
