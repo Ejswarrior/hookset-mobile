@@ -17,16 +17,21 @@ public class HooksetButton(val modifier: Modifier) {
     fun button(
         variant: String,
         buttonText: String,
-        onButtonClick: () -> Unit
+        onButtonClick: () -> Unit,
+        disabled: Boolean
     ) {
-        Button(modifier = modifier
+        Button(
+            modifier = modifier
             .width(280.dp)
             .padding(0.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = if( variant === "primary") Color.Blue else Color.White),
-            shape = RoundedCornerShape(25), onClick = onButtonClick) {
+            colors = ButtonDefaults.buttonColors(containerColor = if(disabled) Color.Gray else if( variant === "primary") Color.Blue else Color.White),
+            shape = RoundedCornerShape(25),
+            onClick = onButtonClick,
+            enabled = !disabled
+            )
+            {
                 Text(text = buttonText, color = if(variant === "primary") Color.White else Color.Black)
-
-        }
+            }
     }
 
 }

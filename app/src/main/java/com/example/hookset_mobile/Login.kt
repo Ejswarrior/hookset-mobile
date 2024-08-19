@@ -32,41 +32,42 @@ class Login: ComponentActivity() {
             }
         }
     }
-}
-@Composable
-fun LoginPage(modifier: Modifier = Modifier) {
-    Surface(modifier = modifier
-        .background(color = Color.White)
-        .padding(vertical = 24.dp, horizontal = 24.dp)
-        .fillMaxWidth()
-        .fillMaxHeight(), color = Color.White) {
-        Column{
-            Row(modifier = Modifier.padding(bottom = 85.dp),verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.End) {
-                Text(
-                    text = "Login to Fishopedia",
-                    color = Color.Black,
-                    fontSize = 36.sp,
-                    modifier = Modifier
-                )
-            }
-            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                HooksetInput(modifier).HooktsetTextField("Email")
 
-                HooksetInput(modifier).HooktsetTextField("Password")
-                Row(modifier = Modifier.padding(top = 24.dp)) {
-                    HooksetButton(modifier).button(variant = "primary", buttonText = "Login") {
+    @Composable
+   public fun LoginPage(modifier: Modifier = Modifier) {
+        Surface(modifier = modifier
+            .background(color = Color.White)
+            .padding(vertical = 24.dp, horizontal = 24.dp)
+            .fillMaxWidth()
+            .fillMaxHeight(), color = Color.White) {
+            Column{
+                Row(modifier = Modifier.padding(bottom = 85.dp),verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.End) {
+                    Text(
+                        text = "Login to Fishopedia",
+                        color = Color.Black,
+                        fontSize = 36.sp,
+                        modifier = Modifier
+                    )
+                }
+                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    HooksetInput(modifier).HooktsetTextField("Email")
+
+                    HooksetInput(modifier).HooktsetTextField("Password")
+                    Row(modifier = Modifier.padding(top = 24.dp)) {
+                        HooksetButton(modifier).button(variant = "primary", buttonText = "Login", disabled = true, onButtonClick = {Log.d("idk", "idk")})
+
                     }
+                }
+
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 125.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Forgot Password? Click Here.", fontSize = 16.sp, color = Color.Blue, modifier = Modifier.clickable { Log.d("textClick", "clicked") })
                 }
             }
 
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 125.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = "Forgot Password? Click Here.", fontSize = 16.sp, color = Color.Blue, modifier = Modifier.clickable { Log.d("textClick", "clicked") })
-            }
+
         }
-
-
     }
 }
