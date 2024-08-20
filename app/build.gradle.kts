@@ -66,6 +66,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose.v271)
+    implementation(libs.okhttp)
 
     // Java language implementation
     implementation(libs.androidx.navigation.fragment)
