@@ -14,6 +14,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -48,6 +49,7 @@ android {
         }
     }
 }
+val ktor_version: String by project
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -66,22 +68,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.navigation.compose.v271)
-    implementation(libs.okhttp)
-
-    // Java language implementation
-    implementation(libs.androidx.navigation.fragment)
-    implementation(libs.androidx.navigation.ui)
-
-    // Kotlin
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-
-    // Feature module Support
-    implementation(libs.androidx.navigation.dynamic.features.fragment)
-
-    // Testing Navigation
-    androidTestImplementation(libs.androidx.navigation.testing)
-
-    // Jetpack Compose Integration
-    implementation(libs.navigation.compose)
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-resources:$ktor_version")
 }
