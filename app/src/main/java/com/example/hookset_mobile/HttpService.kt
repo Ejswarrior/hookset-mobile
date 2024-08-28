@@ -2,32 +2,18 @@ package com.example.hookset_mobile
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.resources.Resources
+import io.ktor.client.plugins.resources.get
 
-class HttpService( authToken: String) {
-    private var authToken: String? = null
+class HttpService() {
 
-    init {
-        this.authToken = authToken
-    }
 
-    companion object {
-        @Volatile
-        private var instance: HttpService? = null
-
-        private val client: HttpClient by lazy {
-            HttpClient() {
+        private val client: HttpClient = HttpClient() {
                 install(Resources)
             }
-        }
-        fun getInstance() =
-            instance ?: synchronized(this) {
-                instance ?: HttpService(authToken = ).also { instance = it }
-            }
-
-    }
 
 
-    fun get() {
 
+    fun get(url: String) {
+        client.get(url)
     }
 }
