@@ -50,6 +50,7 @@ android {
     }
 }
 val ktor_version: String by project
+val koin_version: String by project
 
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -71,4 +72,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-resources:$ktor_version")
+    val koinVersion = "3.5.3"
+    implementation("io.insert-koin:koin-android:$koinVersion")
+
 }

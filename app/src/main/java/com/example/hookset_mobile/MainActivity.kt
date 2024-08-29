@@ -11,11 +11,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.koin.core.context.startKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+         startKoin{
+            androidContext(this)
+        }
         setContent {
             AppNavHost(navController = rememberNavController(), modifier = Modifier, startDestination = "login")
         }

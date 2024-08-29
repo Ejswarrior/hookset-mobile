@@ -6,7 +6,6 @@ import io.ktor.client.plugins.resources.get
 
 class HttpService() {
 
-
         private val client: HttpClient = HttpClient() {
                 install(Resources)
             }
