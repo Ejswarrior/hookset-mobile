@@ -74,5 +74,7 @@ dependencies {
     implementation("io.ktor:ktor-client-resources:$ktor_version")
     val koinVersion = "3.5.3"
     implementation("io.insert-koin:koin-android:$koinVersion")
+    implementation("androidx.datastore:datastore:1.1.1")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
 }

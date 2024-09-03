@@ -1,18 +1,17 @@
 package com.example.hookset_mobile
 
 import io.ktor.client.HttpClient
-import io.ktor.client.plugins.resources.Resources
-import io.ktor.client.plugins.resources.get
+import io.ktor.client.request.get
 
-class HttpService() {
+class HttpService(val client: HttpClient) {
 
-        private val client: HttpClient = HttpClient() {
-                install(Resources)
-            }
 
 
 
     fun get(url: String) {
-        client.get(url)
+        suspend {
+            client.get(url)
+
+        }
     }
 }
