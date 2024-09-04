@@ -2,7 +2,6 @@ package com.example.hookset_mobile
 
 import android.content.Context
 import android.os.Bundle
-import android.preference.Preference
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -16,6 +15,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.hookset_mobile.modules.authModule
+import com.example.hookset_mobile.modules.networkModule
+import com.example.hookset_mobile.screens.Login.Login
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -25,7 +28,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
          startKoin{
-            androidContext(this)
+             androidContext(this@MainActivity)
+             modules(networkModule, authModule)
         }
         setContent {
             AppNavHost(navController = rememberNavController(), modifier = Modifier, startDestination = "login")
@@ -43,7 +47,7 @@ fun AppNavHost(
     startDestination: String = "login"
 ) {
     NavHost(navController = navController, startDestination =  startDestination, modifier = modifier) {
-       composable("login") {Login().LoginPage(modifier = modifier)}
+       composable("login") { Login().LoginPage(modifier = modifier)}
     }
 }
 

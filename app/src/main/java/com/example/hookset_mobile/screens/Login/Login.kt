@@ -1,4 +1,4 @@
-package com.example.hookset_mobile
+package com.example.hookset_mobile.screens.Login
 
 import android.os.Bundle
 import android.util.Log
@@ -20,10 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hookset_mobile.AuthService
 import ui.components.HooksetButton
 import ui.components.HooksetInput.HooksetInput
 
-class Login: ComponentActivity() {
+class Login(private val authService: AuthService): ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -32,6 +33,12 @@ class Login: ComponentActivity() {
             }
         }
     }
+
+    private fun onPressLogin() {
+
+    }
+
+
 
     @Composable
    public fun LoginPage(modifier: Modifier = Modifier) {
