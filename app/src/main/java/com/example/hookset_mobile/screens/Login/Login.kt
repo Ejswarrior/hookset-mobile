@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -66,25 +65,29 @@ class Login(): ComponentActivity() {
     fun LoginPage(modifier: Modifier = Modifier) {
         Surface(modifier = modifier
             .background(color = Color.White)
-            .padding(vertical = 24.dp, horizontal = 24.dp)
+            .padding(top = 64.dp, bottom = 24.dp, start = 24.dp, end = 24.dp)
             .fillMaxWidth()
             .fillMaxHeight(), color = Color.White) {
             Column{
-                Row(modifier = Modifier.padding(bottom = 85.dp),verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.End) {
+                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+
                     Text(
                         text = "Login to Fishopedia",
                         color = Color.Black,
                         fontSize = 36.sp,
-                        modifier = Modifier
+
+                        modifier = Modifier.padding(bottom = 48.dp)
                     )
                 }
+
+
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    if(hasError) Text(text = "Invalid Email or password", color = Color.Red, fontSize = 16.sp, modifier = Modifier)
+                    Text(text = "Invalid Email or password", color = Color.Red, fontSize = 18.sp, modifier = Modifier.padding(bottom = 22.dp))
                     HooksetInput(modifier, "Email", email, onChange = { onChange(it, "email") })
 
-                    HooksetInput(modifier, "Password", email, onChange = { onChange(it, "password") })
+                    HooksetInput(modifier, "Password", password, onChange = { onChange(it, "password") })
                     Row(modifier = Modifier.padding(top = 24.dp)) {
-                        HooksetButton(modifier).button(variant = "primary", buttonText = "Login", disabled = true, onButtonClick = { runBlocking { launch {  login() }}})
+                        HooksetButton(modifier).button(variant = "primary", buttonText = "Login", disabled = if(email.isNotEmpty() && password.isNotEmpty()) false else true, onButtonClick = { runBlocking { launch {  login() }}})
                     }
                 }
 
