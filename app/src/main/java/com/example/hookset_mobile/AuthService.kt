@@ -74,8 +74,10 @@ class AuthService(private val client: HttpClient, private val context: Context) 
     }
 
     suspend fun logIn(email: String, password: String): String {
-        val response: HttpResponse = client.get("hello")
+        Log.d("loginResponse","before login")
 
+        val response: HttpResponse = client.get("https://10.0.2.2:7225/login?email=$email&password=$password")
+        Log.d("loginResponse", response.toString())
         if(response.status === HttpStatusCode.OK) {
             updateAuthToken(response.body<String>().toString())
             _loginState = Login_state.LoggedIn.value

@@ -2,6 +2,7 @@ package com.example.hookset_mobile.modules
 
 import android.util.Log
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.observer.ResponseObserver
@@ -14,12 +15,18 @@ import org.koin.dsl.module
 
 val networkModule = module {
     single {
-        HttpClient() {
+        HttpClient(Android) {
+            engine {
+                connectTimeout = 100_000
+                socketTimeout = 100_000
+//                proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("localhost", 7225))
+            }
             install(Resources)
             install(HttpCookies)
 
             install(ResponseObserver) {
                     onResponse { reponse ->
+                        Log.d("url", reponse.headers.toString())
                         Log.d("HTTP Status", reponse.status.value.toString())
                     }
                 }
