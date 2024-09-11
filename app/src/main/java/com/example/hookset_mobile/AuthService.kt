@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.request.get
+import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
@@ -76,8 +76,8 @@ class AuthService(private val client: HttpClient, private val context: Context) 
     suspend fun logIn(email: String, password: String): String {
         Log.d("loginResponse","before login")
 
-        val response: HttpResponse = client.get("https://10.0.2.2:7225/login?email=$email&password=$password")
-        Log.d("loginResponse", response.toString())
+        val response: HttpResponse = client.post("https://10.0.2.2:7225/login?email=$email&password=$password")
+        Log.d("loginResponse", response.body<String>().toString())
         if(response.status === HttpStatusCode.OK) {
             updateAuthToken(response.body<String>().toString())
             _loginState = Login_state.LoggedIn.value

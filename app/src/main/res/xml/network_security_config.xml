@@ -2,16 +2,14 @@
 <network-security-config>
     <base-config>
         <trust-anchors>
-            <!-- Trust preinstalled CAs -->
-            <certificates src="system" />
-            <!-- Additionally trust user added CAs -->
-            <certificates src="user" />
+            <domain includeSubdomains="true">localhost</domain>
+            <domain includeSubdomains="true">10.0.2.2</domain>
+            <certificates src="@raw/localhost"/>
+            <certificates src="system"/>
         </trust-anchors>
     </base-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">developer.android.com</domain>
-        <trust-anchors>
-            <certificates src="@raw/localhost"/>
-        </trust-anchors>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
     </domain-config>
 </network-security-config>

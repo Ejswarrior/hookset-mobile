@@ -2,7 +2,7 @@ package com.example.hookset_mobile.modules
 
 import android.util.Log
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
+import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.cookies.HttpCookies
 import io.ktor.client.plugins.observer.ResponseObserver
@@ -11,15 +11,18 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import org.koin.dsl.module
+import javax.net.ssl.SSLSession
 
 
 val networkModule = module {
     single {
-        HttpClient(Android) {
+        HttpClient(OkHttp) {
             engine {
-                connectTimeout = 100_000
-                socketTimeout = 100_000
-//                proxy = Proxy(Proxy.Type.HTTP, InetSocketAddress("localhost", 7225))
+                config {
+                    followRedirects(true)
+                    hostnameVerifier(hostnameVerifier = { hostname: String, session: SSLSession -> if(hostname == "10.0.2.2") true else false })
+                }
+
             }
             install(Resources)
             install(HttpCookies)

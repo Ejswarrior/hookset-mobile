@@ -73,10 +73,13 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktor_version")
     implementation("io.ktor:ktor-client-resources:$ktor_version")
     implementation("io.ktor:ktor-client-android:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+
     val koinVersion = "3.5.3"
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("androidx.datastore:datastore:1.1.1")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
 
 }
