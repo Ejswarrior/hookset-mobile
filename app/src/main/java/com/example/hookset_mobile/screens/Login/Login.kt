@@ -72,7 +72,7 @@ class Login(): ComponentActivity() {
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 
                     Text(
-                        text = "Login to Fishopedia",
+                        text = "Welcome to Fish-dex",
                         color = Color.Black,
                         fontSize = 36.sp,
 
@@ -82,10 +82,10 @@ class Login(): ComponentActivity() {
 
 
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Invalid Email or password", color = Color.Red, fontSize = 18.sp, modifier = Modifier.padding(bottom = 22.dp))
-                    HooksetInput(modifier, "Email", email, onChange = { onChange(it, "email") })
+                    if(hasError)Text(text = "Invalid Email or password", color = Color.Red, fontSize = 18.sp, modifier = Modifier.padding(bottom = 22.dp))
+                    HooksetInput(modifier, "Email", email, onChange = { onChange(it, "email") }, hidden = false)
 
-                    HooksetInput(modifier, "Password", password, onChange = { onChange(it, "password") })
+                    HooksetInput(modifier, "Password", password, onChange = { onChange(it, "password")}, hidden = true)
                     Row(modifier = Modifier.padding(top = 24.dp)) {
                         HooksetButton(modifier).button(variant = "primary", buttonText = "Login", disabled = if(email.isNotEmpty() && password.isNotEmpty()) false else true, onButtonClick = { runBlocking { launch {  login() }}})
                     }
