@@ -1,28 +1,28 @@
 package ui.components
 
-import android.content.Context
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.imageLoader
 import coil.request.ImageRequest
+import coil.size.Scale
+import coil.util.DebugLogger
 import com.example.hookset_mobile.R
-import org.jetbrains.annotations.Async
 
-@Preview
 @Composable
-fun ProfilePicture(context: Context, src: String, description: String, modifier: Modifier,  size: Int,){
+fun ProfilePicture(src: String, description: String, modifier: Modifier,  size: Int,){
+    val imageLoader = LocalContext.current.imageLoader.newBuilder().logger(DebugLogger()).build()
+
     AsyncImage(
-        model = ImageRequest.Builder(context).data(src).crossfade(true).build(),
+        imageLoader = imageLoader,
+        model = ImageRequest.Builder(LocalContext.current).data(src).scale(Scale.FIT).crossfade(true).build(),
         contentDescription = description,
         placeholder = painterResource(R.drawable.profilepic),
         contentScale = ContentScale.Crop,

@@ -29,7 +29,7 @@ import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import ui.components.HooksetButton
 import ui.components.HooksetInput.HooksetInput
-import ui.components.PostImage
+import ui.components.posts.PostImage
 
 class Login(): ComponentActivity() {
     private val authService: AuthService by inject()

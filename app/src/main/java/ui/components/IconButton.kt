@@ -27,10 +27,10 @@ fun IconButton(text: String, icon: Int, description: String, modifier: Modifier,
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painterResource(id = icon), contentDescription = description, tint = Color.White, modifier = modifier
-                    .height(22.dp)
-                    .width(22.dp))
+                    .height(18.dp)
+                    .width(18.dp))
 
-            Text(text = text, fontSize = 18.sp, color = Color.White)
+            Text(text = text, fontSize = 16.sp, color = Color.White)
         }
     }
 

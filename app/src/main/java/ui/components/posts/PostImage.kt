@@ -1,4 +1,4 @@
-package ui.components
+package ui.components.posts
 
 import android.util.Log
 import androidx.compose.foundation.clickable
