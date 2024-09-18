@@ -28,26 +28,7 @@ class AuthService(private val client: HttpClient, private val context: Context) 
         return _loginState
     }
 
-    suspend fun checkLoginState(): String {
-        try {
-            val authToken = getAuthToken()
-
-            if(authToken != null) {
-                _loginState = Login_state.LoggedIn.value
-            }
-            else {
-                _loginState = Login_state.LoggedOut.value
-            }
-
-            return _loginState
-        }
-        catch(e: Exception) {
-            Log.d(authServiceTag, e.toString())
-            _loginState = Login_state.LoggedOut.value
-            return _loginState
-        }
-    }
-
+  
     suspend fun getAuthToken(): String? {
         val authToken: Flow<String?> = context.dataStore.data.map { settings ->
             settings[storeAuthToken]

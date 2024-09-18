@@ -1,5 +1,6 @@
 package com.example.hookset_mobile.screens.Login
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -28,9 +29,11 @@ import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import ui.components.HooksetButton
 import ui.components.HooksetInput.HooksetInput
+import ui.components.PostImage
 
 class Login(): ComponentActivity() {
     private val authService: AuthService by inject()
+    private val context: Context by inject()
     private  val loginRepo: LoginRepository = LoginRepository(authService)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,8 +81,15 @@ class Login(): ComponentActivity() {
 
                         modifier = Modifier.padding(bottom = 48.dp)
                     )
-                }
 
+                    PostImage(
+                        height = 90,
+                        width = 160,
+                        src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFTQBraO32lJCrlInBc6A-YTHAW_C0ngGkfA&s",
+                        description = "image of fish",
+                        modifier = Modifier,
+                    )
+                }
 
                 Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
                     if(hasError)Text(text = "Invalid Email or password", color = Color.Red, fontSize = 18.sp, modifier = Modifier.padding(bottom = 22.dp))
