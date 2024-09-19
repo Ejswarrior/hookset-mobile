@@ -1,12 +1,14 @@
 package ui.components.posts
 
 import android.util.Log
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -55,12 +57,12 @@ fun PostBody(description: String, postUrl: String, modifier: Modifier) {
 }
 @Composable
 fun PostFooter(modifier: Modifier) {
-    Row(modifier = Modifier.width(210.dp)) {
-        IconButton(text = "246", icon = R.drawable.baseline_favorite_border_24, description = "Favorite button" , modifier = Modifier) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center, modifier = Modifier.width(210.dp)) {
+        IconButton(text = "246", icon = R.drawable.baseline_favorite_border_24, description = "Favorite button" , modifier = modifier) {
             Log.d("iconButton", "button Pressed")
         }
 
-        IconButton(text = "246", icon = R.drawable.baseline_comment_24, description = "Favorite button" , modifier = Modifier) {
+        IconButton(text = "246", icon = R.drawable.baseline_comment_24, description = "Comment button" , modifier = modifier) {
             Log.d("iconButton", "button Pressed")
         }
     }
@@ -68,22 +70,18 @@ fun PostFooter(modifier: Modifier) {
 
 
 @Composable
-fun Post() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier) {
-        PostHeader(avatarImageUrl = "https://th.bing.com/th/id/OIP.L1svECFMJ4lNsseT6Ooi-gHaHa?rs=1&pid=ImgDetMain", userName = "Ejswarrior", timeStamp = "5m", fishSpecies = "Steelhead", modifier = Modifier)
-        PostBody(description = "Look at this huge fish I caught at the niagara river! Shoutout to the guy that helped me net it!", postUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFTQBraO32lJCrlInBc6A-YTHAW_C0ngGkfA&s", modifier = Modifier)
-        PostFooter(modifier = Modifier)
+fun Post(avatarImageUrl: String, userName: String, timeStamp: String, fishSpecies: String, description: String, postUrl: String, modifier: Modifier) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = modifier.border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(16.dp))) {
+        PostHeader(avatarImageUrl = avatarImageUrl, userName = userName, timeStamp = timeStamp, fishSpecies = fishSpecies, modifier = modifier)
+        PostBody(description = description, postUrl = postUrl, modifier = modifier)
+        PostFooter(modifier = modifier)
     }
 }
 
 @Preview
 @Composable
 fun PostPreview() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = Modifier) {
-        PostHeader(avatarImageUrl = "https://th.bing.com/th/id/OIP.L1svECFMJ4lNsseT6Ooi-gHaHa?rs=1&pid=ImgDetMain", userName = "Ejswarrior", timeStamp = "5m", fishSpecies = "Steelhead", modifier = Modifier)
-        PostBody(description = "Look at this huge fish I caught at the niagara river! Shoutout to the guy that helped me net it!", postUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFTQBraO32lJCrlInBc6A-YTHAW_C0ngGkfA&s", modifier = Modifier)
-        PostFooter(modifier = Modifier)
-    }
+   Post(avatarImageUrl = "https://th.bing.com/th/id/OIP.L1svECFMJ4lNsseT6Ooi-gHaHa?rs=1&pid=ImgDetMain", userName = "Ejswarrior", timeStamp = "5m", fishSpecies = "Steelhead", description = "Look at this huge fish I caught at the niagara river! Shoutout to the guy that helped me net it!", postUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFTQBraO32lJCrlInBc6A-YTHAW_C0ngGkfA&s", modifier = Modifier)
 }
 
 
