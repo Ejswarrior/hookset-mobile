@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.hookset_mobile.AuthService
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -31,7 +32,7 @@ import ui.components.HooksetButton
 import ui.components.HooksetInput.HooksetInput
 import ui.components.posts.PostImage
 
-class Login(): ComponentActivity() {
+class Login(val navController: NavController): ComponentActivity() {
     private val authService: AuthService by inject()
     private val context: Context by inject()
     private  val loginRepo: LoginRepository = LoginRepository(authService)
@@ -55,11 +56,11 @@ class Login(): ComponentActivity() {
         else if(type === "password") password = value
     }
 
-    private suspend fun login() {
+    private suspend fun login(navController: NavController) {
         val loginResult = loginRepo.login(email, password)
-
-        if(loginResult === "success") {
-            //navigate
+        Log.d("login", "loginResult $loginResult")
+        if(loginResult === "Success") {
+            navController.navigate("posts")
         }
         else hasError = true
     }
@@ -97,7 +98,7 @@ class Login(): ComponentActivity() {
 
                     HooksetInput(modifier, "Password", password, onChange = { onChange(it, "password")}, hidden = true)
                     Row(modifier = Modifier.padding(top = 24.dp)) {
-                        HooksetButton(modifier).button(variant = "primary", buttonText = "Login", disabled = if(email.isNotEmpty() && password.isNotEmpty()) false else true, onButtonClick = { runBlocking { launch {  login() }}})
+                        HooksetButton(modifier).button(variant = "primary", buttonText = "Login", disabled = if(email.isNotEmpty() && password.isNotEmpty()) false else true, onButtonClick = { runBlocking { launch {  login(navController) }}})
                     }
                 }
 

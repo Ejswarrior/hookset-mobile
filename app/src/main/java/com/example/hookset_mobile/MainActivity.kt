@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hookset_mobile.modules.authModule
 import com.example.hookset_mobile.modules.networkModule
 import com.example.hookset_mobile.screens.Login.Login
+import com.example.hookset_mobile.screens.posts.Posts
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -47,7 +48,8 @@ fun AppNavHost(
     startDestination: String = "login"
 ) {
     NavHost(navController = navController, startDestination =  startDestination, modifier = modifier) {
-       composable("login") { Login().LoginPage(modifier = modifier)}
+       composable("login") { Login(navController = navController).LoginPage(modifier = modifier)}
+        composable("posts"){ Posts(navController = navController).PostScreen() }
     }
 }
 

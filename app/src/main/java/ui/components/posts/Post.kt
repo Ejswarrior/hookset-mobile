@@ -1,5 +1,6 @@
 package ui.components.posts
 
+import android.content.res.Resources
 import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,26 +24,28 @@ import com.example.hookset_mobile.R
 import ui.components.FishLogText
 import ui.components.IconButton
 import ui.components.ProfilePicture
-
+val dimensions = Resources.getSystem().displayMetrics
+val postWidth = dimensions.widthPixels -24
 @Composable
 fun PostHeader(avatarImageUrl: String, userName: String, timeStamp: String, fishSpecies: String, modifier: Modifier) {
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = modifier
         .padding(8.dp)
-        .width(210.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.width(210.dp)) {
+        .width(postWidth.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.width(
+            postWidth.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ProfilePicture(src = avatarImageUrl, description = "Profile picture", modifier = modifier, size = 35)
+                ProfilePicture(src = avatarImageUrl, description = "Profile picture", modifier = modifier, size = 60)
 
                 Column {
-                    Text(text = userName, fontSize = 12.sp, color = Color.White)
+                    Text(text = userName, fontSize = 18.sp, color = Color.Black)
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(text = timeStamp, fontSize = 8 .sp, color = Color.LightGray)
-                        Text(text = " -  $fishSpecies", fontSize = 8.sp, color = Color.LightGray)
+                        Text(text = timeStamp, fontSize = 14.sp, color = Color.LightGray)
+                        Text(text = " -  $fishSpecies", fontSize = 14.sp, color = Color.LightGray)
                     }
                 }
             }
 
-            FishLogText(text = "...", color = Color.White, fontSize = 10, modifier = modifier )
+            FishLogText(text = "...", color = Color.Black, fontSize = 18, modifier = modifier )
 
         }
     }
@@ -51,8 +54,8 @@ fun PostHeader(avatarImageUrl: String, userName: String, timeStamp: String, fish
 @Composable
 fun PostBody(description: String, postUrl: String, modifier: Modifier) {
     Column {
-        Text(text = description, maxLines = 4, fontSize = 12.sp, overflow = TextOverflow.Ellipsis, color = Color.White, textAlign = TextAlign.Center, modifier = modifier.widthIn(min = 10.dp, max = 210.dp))
-        PostImage(height = 150, width = 210, src = postUrl, description = "Picture of a fish", modifier = modifier)
+        Text(text = description, maxLines = 4, fontSize = 12.sp, overflow = TextOverflow.Ellipsis, color = Color.Black, textAlign = TextAlign.Center, modifier = modifier.widthIn(min = 10.dp, max = postWidth.dp))
+        PostImage(height = 150, width = postWidth, src = postUrl, description = "Picture of a fish", modifier = modifier)
     }
 }
 @Composable

@@ -58,10 +58,12 @@ class AuthService(private val client: HttpClient, private val context: Context) 
         Log.d("loginResponse","before login")
 
         val response: HttpResponse = client.post("https://10.0.2.2:7225/login?email=$email&password=$password")
-        Log.d("loginResponse", response.body<String>().toString())
-        if(response.status === HttpStatusCode.OK) {
+        Log.d("loginResponse", response.status.toString())
+        Log.d("statusCode", if(HttpStatusCode.OK.value.toString() == response.status.value.toString()) "true" else "false")
+        if(response.status.value.toString() == HttpStatusCode.OK.value.toString()) {
             updateAuthToken(response.body<String>().toString())
             _loginState = Login_state.LoggedIn.value
+            Log.d("login", "hit success")
             return "Success"
         }
         else {
