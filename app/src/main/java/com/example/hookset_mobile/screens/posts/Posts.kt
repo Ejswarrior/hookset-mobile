@@ -1,8 +1,10 @@
 package com.example.hookset_mobile.screens.posts
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ui.components.posts.Post
 
@@ -22,7 +24,7 @@ class Posts(navController: NavController) {
     @Composable
     fun PostScreen() {
 
-        LazyColumn() {
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             item {
                 Post(
                     avatarImageUrl = postList.avatarImageUrl,

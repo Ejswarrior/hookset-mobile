@@ -34,13 +34,13 @@ fun PostHeader(avatarImageUrl: String, userName: String, timeStamp: String, fish
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = modifier.width(
             postWidth.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                ProfilePicture(src = avatarImageUrl, description = "Profile picture", modifier = modifier, size = 60)
+                ProfilePicture(src = avatarImageUrl, description = "Profile picture", modifier = modifier, size = 45)
 
                 Column {
                     Text(text = userName, fontSize = 18.sp, color = Color.Black)
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                        Text(text = timeStamp, fontSize = 14.sp, color = Color.LightGray)
-                        Text(text = " -  $fishSpecies", fontSize = 14.sp, color = Color.LightGray)
+                        Text(text = timeStamp, fontSize = 16.sp, color = Color.LightGray)
+                        Text(text = " -  $fishSpecies", fontSize = 16.sp, color = Color.LightGray)
                     }
                 }
             }
@@ -53,8 +53,8 @@ fun PostHeader(avatarImageUrl: String, userName: String, timeStamp: String, fish
 
 @Composable
 fun PostBody(description: String, postUrl: String, modifier: Modifier) {
-    Column {
-        Text(text = description, maxLines = 4, fontSize = 12.sp, overflow = TextOverflow.Ellipsis, color = Color.Black, textAlign = TextAlign.Center, modifier = modifier.widthIn(min = 10.dp, max = postWidth.dp))
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(text = description, maxLines = 4, fontSize = 16.sp, overflow = TextOverflow.Ellipsis, color = Color.Black, textAlign = TextAlign.Center, modifier = modifier.widthIn(min = 10.dp, max = postWidth.dp))
         PostImage(height = 150, width = postWidth, src = postUrl, description = "Picture of a fish", modifier = modifier)
     }
 }
@@ -77,6 +77,8 @@ fun Post(avatarImageUrl: String, userName: String, timeStamp: String, fishSpecie
     Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center, modifier = modifier.border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(16.dp))) {
         PostHeader(avatarImageUrl = avatarImageUrl, userName = userName, timeStamp = timeStamp, fishSpecies = fishSpecies, modifier = modifier)
         PostBody(description = description, postUrl = postUrl, modifier = modifier)
+    }
+    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
         PostFooter(modifier = modifier)
     }
 }

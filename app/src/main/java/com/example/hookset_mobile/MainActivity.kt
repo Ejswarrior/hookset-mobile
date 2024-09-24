@@ -2,9 +2,12 @@ package com.example.hookset_mobile
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.datastore.core.DataStore
@@ -18,6 +21,9 @@ import com.example.hookset_mobile.modules.authModule
 import com.example.hookset_mobile.modules.networkModule
 import com.example.hookset_mobile.screens.Login.Login
 import com.example.hookset_mobile.screens.posts.Posts
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -31,24 +37,49 @@ class MainActivity : ComponentActivity() {
              androidContext(this@MainActivity)
              modules(networkModule, authModule)
         }
+        val authService: AuthService by inject()
+
+
         setContent {
-            AppNavHost(navController = rememberNavController(), modifier = Modifier, startDestination = "login")
+            Box(modifier = Modifier.safeDrawingPadding()) {
+
+                val navController = rememberNavController()
+
+                AppNavHost(navController = navController, modifier = Modifier, startDestination = "start", authService = authService)
+            }
+
         }
     }
 
 
 }
 
+fun startScreen(authService: AuthService, navController: NavHostController){
+    Log.d("startScreen", "in start screen")
+    runBlocking {
+        launch {
+            val loginStatus = authService.getAuthToken()
+            Log.d("loginStatus", loginStatus.toString())
+            if(loginStatus != null){
+                navController.navigate("posts")
+            }
+            else navController.navigate("login")
+        }
+    }
+    Log.d("startScreen", "afterStartScreen")
 
+}
 
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = "login"
+    startDestination: String = "login",
+    authService: AuthService,
 ) {
     NavHost(navController = navController, startDestination =  startDestination, modifier = modifier) {
-       composable("login") { Login(navController = navController).LoginPage(modifier = modifier)}
+        composable("start") { startScreen(authService, navController)}
+        composable("login") { Login(navController = navController).LoginPage(modifier = modifier)}
         composable("posts"){ Posts(navController = navController).PostScreen() }
     }
 }
