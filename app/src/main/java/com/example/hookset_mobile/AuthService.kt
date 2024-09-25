@@ -18,8 +18,18 @@ enum class Login_state(val value: String) {
     LoggedOut("logged_out")
 }
 
+class UserInfo(userId: String, firstName: String, lastName: String) {
+    public val userId = userId
+    public val firstName = firstName
+    public val lastName = lastName
+}
+
 class AuthService(private val client: HttpClient, private val context: Context) {
     private val storeAuthToken = stringPreferencesKey("stored_auth_token")
+    private val storeUserId = stringPreferencesKey("stored_user_id")
+    private val storeFirstName = stringPreferencesKey("stored_firstname")
+    private val storeLastName = stringPreferencesKey("stored_lastname")
+
     private var _loginState = Login_state.LoggedOut.value
     private val authServiceTag = "AuthService"
 
@@ -34,6 +44,24 @@ class AuthService(private val client: HttpClient, private val context: Context) 
             settings[storeAuthToken]
         }
         return authToken.first()
+    }
+
+    suspend fun storeUserData(userId:String, firstName: String, lastName: String) {
+        context.dataStore.edit { settings ->
+            settings[storeUserId] = userId
+            settings[storeFirstName] = firstName
+            settings[storeLastName] = lastName
+        }
+    }
+
+    suspend fun getUserData(): UserInfo {
+        val userValues: Flow<String?> = context.dataStore.data.map { settings ->
+            settings[storeUserId]
+            settings[storeFirstName]
+            settings[storeLastName]
+        }
+
+        return UserInfo(userId = userValues.first(), firstName =  userValues.first(), lastName = userValues.first())
     }
 
     suspend fun updateAuthToken(newAuthToken: String) {

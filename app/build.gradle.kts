@@ -74,7 +74,9 @@ dependencies {
     implementation("io.ktor:ktor-client-resources:$ktor_version")
     implementation("io.ktor:ktor-client-android:$ktor_version")
     implementation("io.ktor:ktor-client-okhttp:$ktor_version")
-
+    implementation("androidx.compose.ui:ui:1.0.0")
+    implementation("androidx.compose.material:material:1.0.0")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha01")
     val koinVersion = "3.5.3"
     implementation("io.insert-koin:koin-android:$koinVersion")
     implementation("androidx.datastore:datastore:1.1.1")

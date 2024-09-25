@@ -20,12 +20,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hookset_mobile.modules.authModule
 import com.example.hookset_mobile.modules.networkModule
 import com.example.hookset_mobile.screens.Login.Login
-import com.example.hookset_mobile.screens.posts.Posts
+import com.example.hookset_mobile.screens.Posts.Posts
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import ui.components.BottomNavigationBar
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -45,7 +46,9 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
 
-                AppNavHost(navController = navController, modifier = Modifier, startDestination = "start", authService = authService)
+                BottomNavigationBar(navController = navController) {
+                    AppNavHost(navController = navController, modifier = Modifier, startDestination = "start", authService = authService)
+                }
             }
 
         }
