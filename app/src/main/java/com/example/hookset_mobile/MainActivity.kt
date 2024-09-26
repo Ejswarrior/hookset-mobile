@@ -64,7 +64,7 @@ fun startScreen(authService: AuthService, navController: NavHostController){
             val loginStatus = authService.getAuthToken()
             Log.d("loginStatus", loginStatus.toString())
             if(loginStatus != null){
-                navController.navigate("posts")
+                navController.navigate("login")
             }
             else navController.navigate("login")
         }

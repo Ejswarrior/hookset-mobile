@@ -11,11 +11,18 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 
 enum class Login_state(val value: String) {
     LoggedIn("logged_in"),
     LoggedOut("logged_out")
+}
+interface LoginResponse {
+    val token: String
+    val userId: String
+    val firstName: String
+    val lastName: String
 }
 
 class UserInfo(userId: String, firstName: String, lastName: String) {
@@ -55,13 +62,15 @@ class AuthService(private val client: HttpClient, private val context: Context) 
     }
 
     suspend fun getUserData(): UserInfo {
-        val userValues: Flow<String?> = context.dataStore.data.map { settings ->
-            settings[storeUserId]
-            settings[storeFirstName]
-            settings[storeLastName]
+        var firstName = ""
+
+        val userValues: Flow<String> = context.dataStore.data.map { settings ->
+            settings[storeUserId] ?: ""
+            firstName = settings[storeFirstName] ?: ""
+            settings[storeLastName] ?: ""
         }
 
-        return UserInfo(userId = userValues.first(), firstName =  userValues.first(), lastName = userValues.first())
+        return UserInfo(userId = userValues.first(), firstName =  firstName, lastName = userValues.last())
     }
 
     suspend fun updateAuthToken(newAuthToken: String) {
@@ -89,7 +98,10 @@ class AuthService(private val client: HttpClient, private val context: Context) 
         Log.d("loginResponse", response.status.toString())
         Log.d("statusCode", if(HttpStatusCode.OK.value.toString() == response.status.value.toString()) "true" else "false")
         if(response.status.value.toString() == HttpStatusCode.OK.value.toString()) {
-            updateAuthToken(response.body<String>().toString())
+            Log.d("login body", response.body<LoginResponse>().toString())
+            val loginResponse = response.body<LoginResponse>()
+            updateAuthToken(loginResponse.token)
+            storeUserData(loginResponse.userId, loginResponse.firstName, loginResponse.lastName)
             _loginState = Login_state.LoggedIn.value
             Log.d("login", "hit success")
             return "Success"
