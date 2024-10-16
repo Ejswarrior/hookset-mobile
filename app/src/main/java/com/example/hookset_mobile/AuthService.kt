@@ -99,9 +99,14 @@ class AuthService(private val client: HttpClient, private val context: Context) 
         Log.d("statusCode", if(HttpStatusCode.OK.value.toString() == response.status.value.toString()) "true" else "false")
         if(response.status.value.toString() == HttpStatusCode.OK.value.toString()) {
             Log.d("login body", response.body<LoginResponse>().toString())
-            val loginResponse = response.body<LoginResponse>()
+            val loginResponse: LoginResponse = response.body()
+            Log.d("loging body", "before update auth")
             updateAuthToken(loginResponse.token)
+            Log.d("loging body", "after update auth")
+
             storeUserData(loginResponse.userId, loginResponse.firstName, loginResponse.lastName)
+            Log.d("loging body", "after update user values")
+
             _loginState = Login_state.LoggedIn.value
             Log.d("login", "hit success")
             return "Success"
