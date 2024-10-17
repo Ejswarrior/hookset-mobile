@@ -13,17 +13,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 enum class Login_state(val value: String) {
     LoggedIn("logged_in"),
     LoggedOut("logged_out")
 }
-interface LoginResponse {
-    val token: String
-    val userId: String
-    val firstName: String
-    val lastName: String
-}
+@Serializable
+data class LoginResponse (
+    @SerialName("token")
+    val token: String,
+    @SerialName("userId")
+    val userId: String,
+    @SerialName("firstName")
+    val firstName: String,
+    @SerialName("lastName")
+    val lastName: String,
+)
 
 class UserInfo(userId: String, firstName: String, lastName: String) {
     public val userId = userId
