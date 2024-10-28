@@ -1,6 +1,8 @@
 package com.example.hookset_mobile.screens.Posts
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.hookset_mobile.AuthService
 import io.ktor.client.HttpClient
 import org.koin.android.ext.android.inject
 import ui.components.posts.Post
@@ -25,6 +28,9 @@ class Posts(navController: NavController): ComponentActivity() {
         }
     }
     val httpClient: HttpClient by inject()
+    private val authService: AuthService by inject()
+    private val context: Context by inject()
+    private val postRepo: PostsRepository = PostsRepository(httpClient, authService, context)
 
     val modifier: Modifier = Modifier
     object postList {
@@ -36,7 +42,12 @@ class Posts(navController: NavController): ComponentActivity() {
         val postUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFTQBraO32lJCrlInBc6A-YTHAW_C0ngGkfA&s"
         val modifier = Modifier
     }
-
+    init {
+        Log.d("postScreen", "hit post init")
+        suspend {
+            postRepo.getPosts()
+        }
+    }
 
 
 

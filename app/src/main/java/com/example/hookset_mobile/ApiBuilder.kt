@@ -6,15 +6,17 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import kotlinx.serialization.SerialName
- class FailedResponse(val status: HttpStatusCode, val responseText: String) {
+import io.ktor.http.URLBuilder
+
+class GetResponseReturn <out T>(val status: HttpStatusCode, val responseText: String, val body: T?) {
      val statusCode = status;
      val errorText = responseText;
+     val requestBody = body
  }
 
-class ApiBuilder private constructor(val httpClient: HttpClient, val authService: AuthService) {
+class ApiBuilder public constructor(val httpClient: HttpClient, val authService: AuthService) {
 
-    suspend inline fun <reified T>get(path: String): T  {
+    suspend inline fun <reified T>get(path: String, noinline urlParams:  URLBuilder.(URLBuilder) -> Unit): GetResponseReturn<T>  {
         val authToken = authService.getAuthToken()
         if (authToken == null) {
             authService.logOut()
@@ -25,12 +27,16 @@ class ApiBuilder private constructor(val httpClient: HttpClient, val authService
             headers {
                 append(HttpHeaders.Authorization, authToken)
             }
+            url (
+                urlParams
+            )
+
         }
         if (response.status.value.toString() == HttpStatusCode.OK.value.toString()) {
             val responseBody: T = response.body()
-            return responseBody
+            return GetResponseReturn<T>(response.status, response.status.toString(), responseBody)
         } else {
-            return FailedResponse(response.status, response.toString())
+            return GetResponseReturn<T>(response.status, response.status.toString(), null)
         }
     }
 }
