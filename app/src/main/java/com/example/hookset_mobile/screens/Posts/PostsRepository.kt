@@ -7,6 +7,8 @@ import com.example.hookset_mobile.ApiBuilder
 import com.example.hookset_mobile.AuthService
 import com.example.hookset_mobile.dataStore
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.Date
 
@@ -25,17 +27,18 @@ class PostsRepository(val httpClient: HttpClient, val authService: AuthService, 
     private val storeUserId = stringPreferencesKey("stored_user_id")
 
     public suspend fun getPosts() {
-        val userId: String = "";
 
-         context.dataStore.data.map { settings ->
+        val storage: Flow<String?> = context.dataStore.data.map { settings ->
             settings[storeUserId] ?: ""
         }
+        storage.first()?.let { Log.d("userId", it) }
+        val userId = storage.first()
         val posts = ApiBuilder(httpClient, authService).get<PostDTO>("https://10.0.2.2:7225/posts/") {
-            parameters.append("userId", userId)
+            userId?.let { it1 -> parameters.append("userId", it1) }
             parameters.append("perPage", "25")
             parameters.append("page", "1")
         }
 
-        Log.d("post response", posts.toString())
+        Log.d("post response", posts.body.toString())
     }
 }

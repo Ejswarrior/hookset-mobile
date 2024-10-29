@@ -1,5 +1,6 @@
 package com.example.hookset_mobile
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -32,10 +33,12 @@ class ApiBuilder public constructor(val httpClient: HttpClient, val authService:
             )
 
         }
-        if (response.status.value.toString() == HttpStatusCode.OK.value.toString()) {
+        if (response.status.value.toString() == HttpStatusCode.OK.value.toString() || response.status.value.toString() == "405") {
             val responseBody: T = response.body()
+            Log.d("getResponse", responseBody.toString())
             return GetResponseReturn<T>(response.status, response.status.toString(), responseBody)
         } else {
+            Log.d("hit no response statement", "hit")
             return GetResponseReturn<T>(response.status, response.status.toString(), null)
         }
     }
