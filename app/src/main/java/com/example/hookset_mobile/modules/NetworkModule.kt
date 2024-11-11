@@ -54,5 +54,3 @@ val networkModule = module {
     }
 
 }
-class NetworkModule {
-}
