@@ -99,29 +99,37 @@ class AuthService(private val client: HttpClient, private val context: Context) 
     }
 
     suspend fun logIn(email: String, password: String): String {
-        Log.d("loginResponse","before login")
+        try{
+            Log.d("loginResponse","before login")
 
-        val response: HttpResponse = client.post("https://10.0.2.2:7225/login?email=$email&password=$password")
-        Log.d("loginResponse", response.status.toString())
-        Log.d("statusCode", if(HttpStatusCode.OK.value.toString() == response.status.value.toString()) "true" else "false")
-        if(response.status.value.toString() == HttpStatusCode.OK.value.toString()) {
-            Log.d("login body", response.body<LoginResponse>().toString())
-            val loginResponse: LoginResponse = response.body()
-            Log.d("loging body", "before update auth")
-            updateAuthToken(loginResponse.token)
-            Log.d("loging body", "after update auth")
+            val response: HttpResponse = client.post("https://10.0.2.2:7225/login?email=$email&password=$password")
+            Log.d("loginResponse", response.status.toString())
+            Log.d("statusCode", if(HttpStatusCode.OK.value.toString() == response.status.value.toString()) "true" else "false")
+            if(response.status.value.toString() == HttpStatusCode.OK.value.toString()) {
+                Log.d("login body", response.body<LoginResponse>().toString())
+                val loginResponse: LoginResponse = response.body()
+                Log.d("loging body", "before update auth")
+                updateAuthToken(loginResponse.token)
+                Log.d("loging body", "after update auth")
 
-            storeUserData(loginResponse.userId, loginResponse.firstName, loginResponse.lastName)
-            Log.d("loging body", "after update user values")
+                storeUserData(loginResponse.userId, loginResponse.firstName, loginResponse.lastName)
+                Log.d("loging body", "after update user values")
 
-            _loginState = Login_state.LoggedIn.value
-            Log.d("login", "hit success")
-            return "Success"
+                _loginState = Login_state.LoggedIn.value
+                Log.d("login", "hit success")
+                return "Success"
+            }
+            else {
+                if(_loginState == Login_state.LoggedIn.value) _loginState = Login_state.LoggedOut.value
+                return "Failed"
+            }
         }
-        else {
-            if(_loginState == Login_state.LoggedIn.value) _loginState = Login_state.LoggedOut.value
+        catch(e: Exception) {
+            Log.e("loginError:", e.toString())
+            Log.d("login status", "login failed")
             return "Failed"
         }
+
 
     }
 

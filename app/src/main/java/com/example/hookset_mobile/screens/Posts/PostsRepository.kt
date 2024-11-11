@@ -10,15 +10,24 @@ import io.ktor.client.HttpClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.util.Date
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PostDTO (
+    @SerialName("id")
     val id: String,
+    @SerialName("userId")
     val userId: String,
-    val createdDate: Date,
+    @SerialName("createdDate")
+    val createdDate: String,
+    @SerialName("likes")
     val likes: Int,
+    @SerialName("description")
     val description: String,
+    @SerialName("userName")
     val userName: String,
+    @SerialName("updatedDate")
     val updatedDate: String,
 )
 
