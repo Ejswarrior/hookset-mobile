@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
@@ -102,7 +104,10 @@ class AuthService(private val client: HttpClient, private val context: Context) 
         try{
             Log.d("loginResponse","before login")
 
-            val response: HttpResponse = client.post("https://10.0.2.2:7225/login?email=$email&password=$password")
+            val response: HttpResponse = client.post {
+                url("https://10.0.2.2:7225/login?email=$email&password=$password")
+                setBody("")
+            }
             Log.d("loginResponse", response.status.toString())
             Log.d("statusCode", if(HttpStatusCode.OK.value.toString() == response.status.value.toString()) "true" else "false")
             if(response.status.value.toString() == HttpStatusCode.OK.value.toString()) {

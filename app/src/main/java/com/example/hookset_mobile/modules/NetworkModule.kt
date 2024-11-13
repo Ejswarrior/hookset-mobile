@@ -11,8 +11,7 @@ import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
-import kotlinx.serialization.json.Json
+import io.ktor.serialization.kotlinx.json.json
 import org.koin.dsl.module
 import javax.net.ssl.SSLSession
 
@@ -30,15 +29,7 @@ val networkModule = module {
             install(Resources)
             install(HttpCookies)
             install(ContentNegotiation) {
-                register(
-                    ContentType.Text.Html, KotlinxSerializationConverter(
-                        Json {
-                            prettyPrint = true
-                            isLenient = true
-                            ignoreUnknownKeys = true
-                        }
-                    )
-                )
+                        json()
             }
             install(ResponseObserver) {
                     onResponse { reponse ->
