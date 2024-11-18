@@ -30,6 +30,7 @@ val networkModule = module {
             install(HttpCookies)
             install(ContentNegotiation) {
                         json()
+                ContentType("application", "json+hal")
             }
             install(ResponseObserver) {
                     onResponse { reponse ->

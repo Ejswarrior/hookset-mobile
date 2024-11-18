@@ -42,7 +42,7 @@ class PostsRepository(val httpClient: HttpClient, val authService: AuthService, 
         }
         storage.first()?.let { Log.d("userId", it) }
         val userId = storage.first()
-        val posts = ApiBuilder(httpClient, authService).get<PostDTO>("https://10.0.2.2:7225/posts/") {
+        val posts = ApiBuilder(httpClient, authService).get<List<PostDTO>>("https://10.0.2.2:7225/posts/list-posts") {
             userId?.let { it1 -> parameters.append("userId", it1) }
             parameters.append("perPage", "25")
             parameters.append("page", "1")
