@@ -16,6 +16,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.hookset_mobile.modules.authModule
 import com.example.hookset_mobile.modules.networkModule
@@ -45,6 +46,8 @@ class MainActivity : ComponentActivity() {
             Box(modifier = Modifier.safeDrawingPadding()) {
 
                 val navController = rememberNavController()
+
+               Log.d("navController", navController.currentBackStackEntryAsState().toString())
 
                 BottomNavigationBar(navController = navController) {
                     AppNavHost(navController = navController, modifier = Modifier, startDestination = "start", authService = authService)

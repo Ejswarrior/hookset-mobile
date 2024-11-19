@@ -12,6 +12,7 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import javax.net.ssl.SSLSession
 
@@ -29,7 +30,11 @@ val networkModule = module {
             install(Resources)
             install(HttpCookies)
             install(ContentNegotiation) {
-                        json()
+                        json(Json{
+                            ignoreUnknownKeys = true
+                            prettyPrint = true
+                        })
+
                 ContentType("application", "json+hal")
             }
             install(ResponseObserver) {

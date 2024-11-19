@@ -28,7 +28,13 @@ data class PostDTO (
     @SerialName("userName")
     val userName: String,
     @SerialName("updatedDate")
-    val updatedDate: String,
+    val updatedDate: String?,
+    @SerialName("bodyOfWaterCaughtIn")
+    val bodyOfWaterCaughtIn: String?,
+    @SerialName("length")
+    val length: Int?,
+    @SerialName("weight")
+    val weight: Int?
 )
 
 
