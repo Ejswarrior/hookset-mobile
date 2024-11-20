@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 @Serializable
 data class PostDTO (
@@ -38,7 +39,7 @@ data class PostDTO (
 )
 
 
-class PostsRepository(val httpClient: HttpClient, val authService: AuthService, val context: Context) {
+class PostsRepository(val httpClient: HttpClient, val authService: AuthService, val context: Context, var postState: List<PostDTO>) {
     private val storeUserId = stringPreferencesKey("stored_user_id")
 
     public suspend fun getPosts() {
@@ -50,10 +51,9 @@ class PostsRepository(val httpClient: HttpClient, val authService: AuthService, 
         val userId = storage.first()
         val posts = ApiBuilder(httpClient, authService).get<List<PostDTO>>("https://10.0.2.2:7225/posts/list-posts") {
             userId?.let { it1 -> parameters.append("userId", it1) }
-            parameters.append("perPage", "25")
-            parameters.append("page", "1")
         }
 
-        Log.d("post response", posts.body.toString())
+        if(posts.requestBody != null) Log.d("post body", Json.decodeFromString(posts.requestBody.first().toString()))
+        if(posts.requestBody != null) postState = Json.decodeFromString(posts.requestBody.toString());
     }
 }

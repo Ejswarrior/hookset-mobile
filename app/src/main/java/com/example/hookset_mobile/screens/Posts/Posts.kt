@@ -2,11 +2,14 @@ package com.example.hookset_mobile.screens.Posts
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.hookset_mobile.AuthService
@@ -29,8 +32,6 @@ class Posts(navController: NavController): ComponentActivity() {
     val httpClient: HttpClient by inject()
     private val authService: AuthService by inject()
     private val context: Context by inject()
-    private val postRepo: PostsRepository = PostsRepository(httpClient, authService, context)
-
     val modifier: Modifier = Modifier
     object postList {
         val avatarImageUrl = "https://th.bing.com/th/id/OIP.L1svECFMJ4lNsseT6Ooi-gHaHa?rs=1&pid=ImgDetMain"
@@ -44,8 +45,14 @@ class Posts(navController: NavController): ComponentActivity() {
 
     @Composable
     fun PostScreen() {
+        var posts: List<PostDTO> = remember { mutableStateListOf() }
+        val postRepo: PostsRepository = PostsRepository(httpClient, authService, context, posts)
+
         Column {
-            HooksetButton(modifier).button(variant = "primary", buttonText = "Posts", disabled = false, onButtonClick = { runBlocking { launch {  postRepo.getPosts() }} })
+            HooksetButton(modifier).button(variant = "primary", buttonText = "Posts", disabled = false, onButtonClick = { runBlocking { launch {
+                postRepo.getPosts()
+                Log.d("posts", posts[0].toString())
+            }} })
         }
 /*
         LazyColumn(verticalArrangement = Arrangement.spacedBy(6.dp)) {
