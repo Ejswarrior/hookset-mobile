@@ -9,8 +9,10 @@ import io.ktor.client.request.setBody
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLBuilder
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-class GetResponseReturn <out T>(val status: HttpStatusCode, val responseText: String, val body: T?) {
+class GetResponseReturn <out T>(val status: HttpStatusCode, val responseText: String, val body: List<T>?) {
      val statusCode = status;
      val errorText = responseText;
      val requestBody = body
@@ -40,10 +42,12 @@ class ApiBuilder public constructor(val httpClient: HttpClient, val authService:
 
             Log.d("response", response.toString())
             if (response.status.value.toString() == HttpStatusCode.OK.value.toString() || response.status.value.toString() == "405") {
+                Log.d("getResponse", response.body())
 
-                val responseBody: T = response.body()
+                val responseBody = Json.encodeToString<List<T>>(value = response.body())
                 Log.d("getResponse", responseBody.toString())
-                return GetResponseReturn<T>(response.status, response.status.toString(), responseBody)
+
+                return GetResponseReturn<T>(response.status, response.status.toString(), Json.decodeFromString(responseBody))
             } else {
                 Log.d("hit no response statement", "hit")
                 return GetResponseReturn<T>(response.status, response.status.toString(), null)

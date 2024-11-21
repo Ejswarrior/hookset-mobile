@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
@@ -45,13 +44,15 @@ class Posts(navController: NavController): ComponentActivity() {
 
     @Composable
     fun PostScreen() {
-        var posts: List<PostDTO> = remember { mutableStateListOf() }
+        var posts: List<PostDTO> = remember { mutableListOf() }
         val postRepo: PostsRepository = PostsRepository(httpClient, authService, context, posts)
 
         Column {
             HooksetButton(modifier).button(variant = "primary", buttonText = "Posts", disabled = false, onButtonClick = { runBlocking { launch {
-                postRepo.getPosts()
-                Log.d("posts", posts[0].toString())
+                val postsResponse = postRepo.getPosts()
+                if(postsResponse != null) posts = postsResponse
+                Log.d("post response", postsResponse?.size.toString())
+                Log.d("posts", posts.size.toString())
             }} })
         }
 /*
