@@ -3,6 +3,7 @@ package com.example.hookset_mobile.screens.Posts
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.ViewModel
 import com.example.hookset_mobile.ApiBuilder
 import com.example.hookset_mobile.AuthService
 import com.example.hookset_mobile.dataStore
@@ -27,7 +28,7 @@ data class PostDTO (
 )
 
 
-class PostsRepository(val httpClient: HttpClient, val authService: AuthService, val context: Context, var postState: List<PostDTO>) {
+class PostsRepository(val httpClient: HttpClient, val authService: AuthService, val context: Context, var postState: List<PostDTO>): ViewModel() {
     private val storeUserId = stringPreferencesKey("stored_user_id")
 
     public suspend fun getPosts(): List<PostDTO>? {
