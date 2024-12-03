@@ -1,5 +1,6 @@
 package com.example.hookset_mobile.screens.Posts
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -28,7 +29,7 @@ data class PostDTO (
 )
 
 
-class PostsRepository(val httpClient: HttpClient, val authService: AuthService, val context: Context, var postState: List<PostDTO>): ViewModel() {
+class PostsRepository(val httpClient: HttpClient, val authService: AuthService, @SuppressLint("StaticFieldLeak") val context: Context): ViewModel() {
     private val storeUserId = stringPreferencesKey("stored_user_id")
 
     public suspend fun getPosts(): List<PostDTO>? {

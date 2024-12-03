@@ -12,8 +12,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -45,7 +47,7 @@ class Posts(navController: NavController): ComponentActivity() {
     fun PostList(posts: List<PostDTO>) {
         if(posts.isNotEmpty())
             LazyColumn(state = rememberLazyListState(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                items(posts) {post ->
+                items(items = posts) {post ->
                     Post(
                         avatarImageUrl =  "",
                         userName = post.userName,
@@ -62,18 +64,28 @@ class Posts(navController: NavController): ComponentActivity() {
 
     @Composable
     fun PostScreen() {
-        val postRepo: PostsRepository = PostsRepository(httpClient, authService, context, posts)
-
+        var posts = remember {
+            emptyList<PostDTO>()
+        }
+        var isLoading by remember {
+            mutableStateOf<Boolean>(false)
+        }
+        var postExists by remember {
+            mutableStateOf<Boolean>(false)
+        }
+        val postRepo: PostsRepository = PostsRepository(httpClient, authService, context)
         Column {
-            HooksetButton(modifier).button(variant = "primary", buttonText = "Posts", disabled = false, onButtonClick = { runBlocking { launch {
+            HooksetButton(modifier).button(variant = "primary", buttonText = "Posts", disabled = isLoading, onButtonClick = { runBlocking { launch {
+                isLoading = true
                 val postsResponse = postRepo.getPosts()
-                if(postsResponse != null) posts =
-                    posts + postsResponse.toMutableList()
+                if(postsResponse != null) posts = postsResponse
 
                 Log.d("post response", postsResponse?.size.toString())
-                Log.d("posts", posts.size.toString())
+                Log.d("posts", posts.toString())
+                isLoading = false
+                postExists = true
             }} })
-            if() PostList(posts = posts)
+            if(postExists) PostList(posts = posts)
         }
 
     }
