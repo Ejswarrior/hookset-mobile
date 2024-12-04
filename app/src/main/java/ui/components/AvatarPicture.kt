@@ -1,5 +1,6 @@
 package ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -20,12 +21,23 @@ import com.example.hookset_mobile.R
 fun ProfilePicture(src: String, description: String, modifier: Modifier,  size: Int,){
     val imageLoader = LocalContext.current.imageLoader.newBuilder().logger(DebugLogger()).build()
 
-    AsyncImage(
-        imageLoader = imageLoader,
-        model = ImageRequest.Builder(LocalContext.current).data(src).scale(Scale.FIT).crossfade(true).build(),
-        contentDescription = description,
-        placeholder = painterResource(R.drawable.profilepic),
-        contentScale = ContentScale.Crop,
-        modifier = modifier.size(size.dp).clip(CircleShape)
-    )
+    if(src === "")
+        Image(
+            painter = painterResource(id = R.drawable.profilepic),
+            contentDescription = "User profile placeholder",
+            modifier=modifier
+            .size(size.dp)
+            .clip(CircleShape)
+        )
+    else
+        AsyncImage(
+            imageLoader = imageLoader,
+            model = ImageRequest.Builder(LocalContext.current).data(src).scale(Scale.FIT).crossfade(true).build(),
+            contentDescription = description,
+            placeholder = painterResource(R.drawable.profilepic),
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(size.dp)
+                .clip(CircleShape)
+        )
 }
