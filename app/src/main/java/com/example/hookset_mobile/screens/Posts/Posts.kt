@@ -4,21 +4,32 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hookset_mobile.AuthService
 import io.ktor.client.HttpClient
 import org.koin.android.ext.android.inject
 import ui.components.posts.Post
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 class Posts(navController: NavController): ComponentActivity() {
@@ -44,11 +55,13 @@ class Posts(navController: NavController): ComponentActivity() {
             LazyColumn(state = rememberLazyListState(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 items(items = posts) {post ->
 
+                    val dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mma", Locale.ENGLISH)
+                    val parsedDate = LocalDateTime.parse(post.createdDate, DateTimeFormatter.ISO_DATE_TIME)
 
                     Post(
                         avatarImageUrl =  "",
                         userName = post.userName,
-                        timeStamp = post.createdDate,
+                        timeStamp = dateFormatter.format(parsedDate),
                         fishSpecies = "Steelhead",
                         description = post.description,
                         postUrl = "postList.postUrl",
@@ -62,6 +75,9 @@ class Posts(navController: NavController): ComponentActivity() {
     @Composable
     fun PostScreen() {
         Column {
+             Row(Modifier.background(Color.Black).fillMaxWidth().height(64.dp).align(Alignment.CenterHorizontally), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
+                 Text(text = "Fish Logs", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight(600))
+             }
             if(!postRepo.loading) 
             PostList(posts = postRepo.postState)
             else 
