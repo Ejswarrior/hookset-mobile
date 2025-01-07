@@ -22,6 +22,7 @@ import com.example.hookset_mobile.modules.authModule
 import com.example.hookset_mobile.modules.networkModule
 import com.example.hookset_mobile.screens.Login.Login
 import com.example.hookset_mobile.screens.Posts.Posts
+import com.example.hookset_mobile.screens.createPost.CreatePost
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
@@ -87,6 +88,7 @@ fun AppNavHost(
         composable("start") { startScreen(authService, navController)}
         composable("login") { Login(navController = navController).LoginPage(modifier = modifier)}
         composable("posts"){ Posts(navController = navController).PostScreen() }
+        composable("createPost") {CreatePost(navController).CreatePostScreen()}
     }
 }
 

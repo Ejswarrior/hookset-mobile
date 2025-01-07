@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,7 +40,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
-class Posts(navController: NavController): ComponentActivity() {
+class Posts(val navController: NavController): ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -93,16 +94,19 @@ class Posts(navController: NavController): ComponentActivity() {
                  Text(text = "Fish Logs", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight(600))
 
              }
-            SmallFloatingActionButton(onClick = { /*TODO*/ }, contentColor = Color(Color.White.value), containerColor = Color(Color.Red.value), modifier = Modifier.offset((screenSize.width - 75.dp), (screenSize.height - 200.dp))) {
-                Icon(Icons.Filled.Add, "Add Post Icon")
-            }
+
+
             if(!postRepo.loading)
                 PostList(posts = postRepo.postState)
             else 
                 Text(text = "loading")
 
-
         }
 
+        Box(modifier = Modifier.offset((screenSize.width - 65.dp), (screenSize.height - 145.dp))) {
+            SmallFloatingActionButton(onClick = { navController.navigate("createPost")}, contentColor = Color(Color.White.value), containerColor = Color(Color.Red.value)) {
+                Icon(Icons.Filled.Add, "Add Post Icon", modifier = Modifier, Color.White)
+            }
+        }
     }
 }
