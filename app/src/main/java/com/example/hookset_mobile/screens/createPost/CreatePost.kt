@@ -8,8 +8,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +24,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,7 +43,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface(modifier = Modifier) {
+            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight().background(color = Color(0xFF4C4C4C))) {
                 CreatePostScreen()
             }
         }
@@ -62,7 +64,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
             .verticalScroll(rememberScrollState())) {
             Text(
                 text = "Provide Details About Your Catch",
-                color = Color.Black,
+                color = Color.White,
                 fontSize = 28.sp,
                 modifier = Modifier.padding(bottom = 48.dp),
                 textAlign = TextAlign.Center
