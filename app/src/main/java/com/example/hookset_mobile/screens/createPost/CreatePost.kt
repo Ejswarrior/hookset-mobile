@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -43,13 +45,22 @@ class CreatePost(navController: NavController): ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Box(modifier = Modifier.fillMaxWidth().fillMaxHeight().background(color = Color(0xFF4C4C4C))) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(color = Color(0xFF4C4C4C))) {
                 CreatePostScreen()
             }
         }
     }
     private val context: Context by inject()
     private var description by mutableStateOf("")
+    private var photoUri by mutableStateOf<String?>(null)
+    private var locationCaught by mutableStateOf("")
+    private var weight by mutableStateOf<Int?>(null)
+    private var height by mutableStateOf<Int?>(null)
+    private var length by mutableStateOf<Int?>(null)
+    private var fishSpecies by mutableStateOf<String?>(null)
 
 
 
@@ -60,15 +71,18 @@ class CreatePost(navController: NavController): ComponentActivity() {
         }
         val modifier = Modifier
         Column(modifier = modifier
-            .padding(24.dp, 12.dp)
+            .padding(12.dp, 12.dp, 12.dp, 46.dp)
             .verticalScroll(rememberScrollState())) {
-            Text(
-                text = "Provide Details About Your Catch",
-                color = Color.White,
-                fontSize = 28.sp,
-                modifier = Modifier.padding(bottom = 48.dp),
-                textAlign = TextAlign.Center
-            )
+            Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                Text(
+                    text = "Log your catch",
+                    color = Color.Black,
+                    fontSize = 28.sp,
+                    modifier = Modifier.padding(bottom = 48.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
             Button(
                 modifier = modifier
                     .height(140.dp)
@@ -81,16 +95,43 @@ class CreatePost(navController: NavController): ComponentActivity() {
                 Icon(Icons.Filled.Add, "Add Post Icon", modifier = Modifier, Color.LightGray)
             }
 
-            Row(modifier = modifier.padding(0.dp, 24.dp, 0.dp, 0.dp)) {
+            Row(modifier = modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)) {
                 HooksetInput(modifier = modifier, inputValue = description, onChange = {description = it}, hidden = false, multiLined = 10, minLines = 6, labelText = "Description" )
             }
 
-            Row(modifier = modifier.padding(0.dp, 24.dp, 0.dp, 0.dp)) {
-                HooksetInput(modifier = modifier, inputValue = description, onChange = {description = it}, hidden = false, labelText = "Where was this caught?" )
+            Row(modifier = modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)) {
+                HooksetInput(modifier = modifier, inputValue = description, onChange = {locationCaught = it}, hidden = false, labelText = "Where was this caught?" )
             }
 
-            Row(modifier = modifier.padding(0.dp, 24.dp, 0.dp, 0.dp)) {
-                HooksetInput(modifier = modifier, inputValue = description, onChange = {description = it}, hidden = false, labelText = "How much did it weigh?" )
+            Row(modifier = modifier
+                .padding(0.dp, 12.dp, 0.dp, 0.dp)
+                .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Weight", fontSize = 20.sp)
+                Box(modifier = modifier.width(180.dp)) {
+                    HooksetInput(
+                        modifier = modifier,
+                        inputValue = description,
+                        onChange = { weight = it.toInt() },
+                        hidden = false
+                    )
+                }
+            }
+            Row(modifier = modifier
+                .padding(0.dp, 12.dp, 0.dp, 0.dp)
+                .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Height", fontSize = 20.sp)
+                Box(modifier = modifier.width(180.dp)) {
+                    HooksetInput(
+                        modifier = modifier,
+                        inputValue = description,
+                        onChange = { height = it.toInt() },
+                        hidden = false
+                    )
+                }
+            }
+
+            Row(modifier = modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)) {
+                HooksetInput(modifier = modifier, inputValue = description, onChange = {fishSpecies = it}, hidden = false, labelText = "What type of fish was caught?" )
             }
 
         }
