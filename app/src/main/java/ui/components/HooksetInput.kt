@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.sp
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.LightGray, focusedContainerColor = Color.LightGray,
                     unfocusedIndicatorColor = Color.Transparent),
-            )
+                       )
         }
     }
 
