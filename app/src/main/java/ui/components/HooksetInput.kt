@@ -43,11 +43,17 @@ import androidx.compose.ui.unit.sp
                 shape = RoundedCornerShape(20),
                 maxLines = if(multiLined === null) 1 else multiLined,
                 minLines = if(minLines === null) 1 else minLines,
-                visualTransformation = if(!hidden) VisualTransformation.None  else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                colors = TextFieldDefaults.colors(unfocusedContainerColor = Color.LightGray, focusedContainerColor = Color.LightGray,
-                    unfocusedIndicatorColor = Color.Transparent),
-                       )
+                visualTransformation = if(!hidden) VisualTransformation.None
+                else PasswordVisualTransformation(),
+                keyboardOptions = if(numInput == true) KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                else KeyboardOptions.Default,
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Color.LightGray,
+                    focusedContainerColor = Color.LightGray,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent
+                )
+            )
         }
     }
 

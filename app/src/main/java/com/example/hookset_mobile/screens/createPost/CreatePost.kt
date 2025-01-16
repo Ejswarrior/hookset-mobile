@@ -1,6 +1,7 @@
 package com.example.hookset_mobile.screens.createPost
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -8,7 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
@@ -35,10 +37,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.imageLoader
+import coil.request.ImageRequest
+import coil.size.Scale
+import coil.util.DebugLogger
 import org.koin.android.ext.android.inject
 import ui.components.HooksetInput.HooksetInput
 import utils.GetScreenSize
@@ -54,7 +62,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
     }
     private val context: Context by inject()
     private var description by mutableStateOf("")
-    private var photoUri by mutableStateOf<String?>(null)
+    private var photoUri by mutableStateOf<Uri?>(null)
     private var locationCaught by mutableStateOf("")
     private var weight by mutableStateOf<Int?>(null)
     private var height by mutableStateOf<Int?>(null)
@@ -64,7 +72,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
 
     @Composable
     fun ColumnScope(modifier: Modifier, content: @Composable ColumnScope.()-> Unit) {
-        Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+        Column(Modifier.fillMaxHeight().padding(0.dp,0.dp,0.dp, 48.dp), verticalArrangement = Arrangement.SpaceBetween) {
             content()
         }
     }
@@ -74,15 +82,30 @@ class CreatePost(navController: NavController): ComponentActivity() {
         val screenSize = GetScreenSize()
 
         val mediaPicker = rememberLauncherForActivityResult(PickVisualMedia()) { uri ->
-            if(uri != null) Log.d("createPost", uri.toString())
+            if(uri != null) photoUri = uri;
         }
+        val imageLoader = LocalContext.current.imageLoader.newBuilder().logger(DebugLogger()).build()
+
+    //adding form data to response
+//        val client = HttpClient(Apache) {}
+//
+//        val file = File("path/to/some.file")
+//        val chatId = "123"
+//
+//        client.submitFormWithBinaryData(
+//            url = "https://api.telegram.org/bot<token>/sendDocument?chat_id=$chatId",
+//            formData = formData {
+//                append("document", file.readBytes(), Headers.build {
+//                    append(HttpHeaders.ContentDisposition, "filename=${file.name}")
+//                })
+//            }
+//        )
 
         ColumnScope(modifier = modifier) {
             Column(
                 Modifier
-                    .padding(12.dp, 12.dp, 12.dp, 46.dp)
-                    .verticalScroll(rememberScrollState())
-                    .weight(1f, false)
+                    .padding(12.dp)
+                    .verticalScroll(rememberScrollState()).weight(1f)
             ) {
                 Row(
                     modifier = modifier.fillMaxWidth(),
@@ -97,7 +120,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
                     )
                 }
 
-                Button(
+                if(photoUri == null) Button(
                     modifier = modifier
                         .height(140.dp)
                         .fillMaxWidth()
@@ -108,6 +131,19 @@ class CreatePost(navController: NavController): ComponentActivity() {
                 ) {
                     Icon(Icons.Filled.Add, "Add Post Icon", modifier = Modifier, Color.LightGray)
                 }
+                else
+                    AsyncImage(
+                        imageLoader = imageLoader,
+                        model = ImageRequest.Builder(LocalContext.current).data(photoUri).scale(Scale.FIT).crossfade(true).build(),
+                        contentDescription = description,
+                        onError = {it ->
+                            Log.d("asyncImageError", it.toString())
+                        },
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .height(140.dp)
+                            .clickable { mediaPicker.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) }
+                    )
 
                 Row(modifier = modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)) {
                     HooksetInput(
@@ -125,11 +161,22 @@ class CreatePost(navController: NavController): ComponentActivity() {
                     HooksetInput(
                         modifier = modifier,
                         inputValue = description,
+                        onChange = { fishSpecies = it },
+                        hidden = false,
+                        labelText = "What type of fish was caught?"
+                    )
+                }
+
+                Row(modifier = modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)) {
+                    HooksetInput(
+                        modifier = modifier,
+                        inputValue = description,
                         onChange = { locationCaught = it },
                         hidden = false,
                         labelText = "Where was this caught?"
                     )
                 }
+
 
                 Row(
                     modifier = modifier
@@ -144,7 +191,8 @@ class CreatePost(navController: NavController): ComponentActivity() {
                             modifier = modifier,
                             inputValue = description,
                             onChange = { weight = it.toInt() },
-                            hidden = false
+                            hidden = false,
+                            numInput = true
                         )
                     }
                 }
@@ -161,26 +209,30 @@ class CreatePost(navController: NavController): ComponentActivity() {
                             modifier = modifier,
                             inputValue = description,
                             onChange = { height = it.toInt() },
-                            hidden = false
+                            hidden = false,
+                            numInput = true
                         )
                     }
                 }
+            }
+            Row(modifier = Modifier.fillMaxWidth()
+               .padding(24.dp, 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                OutlinedButton(onClick = { /*TODO*/ }, modifier = modifier.width(150.dp)) {
+                    Text(text = "Cancel")
+                }
 
-                Row(modifier = modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)) {
-                    HooksetInput(
-                        modifier = modifier,
-                        inputValue = description,
-                        onChange = { fishSpecies = it },
-                        hidden = false,
-                        labelText = "What type of fish was caught?"
-                    )
+                Button(
+                    onClick = { /*TODO*/ },
+                    modifier = modifier.width(150.dp),
+                    colors = ButtonDefaults.buttonColors(Color.Blue),
+                    enabled = description.isNotEmpty() && fishSpecies != null
+                ) {
+                    Text(text = "Submit")
                 }
             }
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp)
-            .background(Color(Color.Red.value)))
-
     }
 }
