@@ -47,6 +47,11 @@ import coil.imageLoader
 import coil.request.ImageRequest
 import coil.size.Scale
 import coil.util.DebugLogger
+import com.example.hookset_mobile.AuthService
+import io.ktor.client.HttpClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import ui.components.HooksetInput.HooksetInput
 import utils.GetScreenSize
@@ -60,7 +65,10 @@ class CreatePost(navController: NavController): ComponentActivity() {
             }
         }
     }
+    private val httpClient: HttpClient by inject()
+    private val authService: AuthService by inject()
     private val context: Context by inject()
+
     private var description by mutableStateOf("")
     private var photoUri by mutableStateOf<Uri?>(null)
     private var locationCaught by mutableStateOf("")
@@ -68,6 +76,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
     private var height by mutableStateOf<Int?>(null)
     private var length by mutableStateOf<Int?>(null)
     private var fishSpecies by mutableStateOf<String?>(null)
+    private val createPostRepo: CreatePostRepository = CreatePostRepository(httpClient, authService)
 
 
     @Composable
@@ -85,21 +94,6 @@ class CreatePost(navController: NavController): ComponentActivity() {
             if(uri != null) photoUri = uri;
         }
         val imageLoader = LocalContext.current.imageLoader.newBuilder().logger(DebugLogger()).build()
-
-    //adding form data to response
-//        val client = HttpClient(Apache) {}
-//
-//        val file = File("path/to/some.file")
-//        val chatId = "123"
-//
-//        client.submitFormWithBinaryData(
-//            url = "https://api.telegram.org/bot<token>/sendDocument?chat_id=$chatId",
-//            formData = formData {
-//                append("document", file.readBytes(), Headers.build {
-//                    append(HttpHeaders.ContentDisposition, "filename=${file.name}")
-//                })
-//            }
-//        )
 
         ColumnScope(modifier = modifier) {
             Column(
@@ -225,10 +219,17 @@ class CreatePost(navController: NavController): ComponentActivity() {
                 }
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            Log.d("fileCLick", "clicked")
+                            if (photoUri !== null) {
+                                createPostRepo.createPost(fileUrl = photoUri!!)
+                            }
+                        }
+                        },
                     modifier = modifier.width(150.dp),
                     colors = ButtonDefaults.buttonColors(Color.Blue),
-                    enabled = description.isNotEmpty() && fishSpecies != null
+                    enabled = photoUri.toString().isNotEmpty()
                 ) {
                     Text(text = "Submit")
                 }
