@@ -76,7 +76,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
     private var height by mutableStateOf<Int?>(null)
     private var length by mutableStateOf<Int?>(null)
     private var fishSpecies by mutableStateOf<String?>(null)
-    private val createPostRepo: CreatePostRepository = CreatePostRepository(httpClient, authService)
+    private val createPostRepo: CreatePostRepository = CreatePostRepository(httpClient, authService, context)
 
 
     @Composable
@@ -223,7 +223,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
                         CoroutineScope(Dispatchers.IO).launch {
                             Log.d("fileCLick", "clicked")
                             if (photoUri !== null) {
-                                createPostRepo.createPost(fileUrl = photoUri!!)
+                                createPostRepo.uploadPostImage(fileUrl = photoUri!!)
                             }
                         }
                         },
