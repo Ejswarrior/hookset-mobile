@@ -69,13 +69,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
     private val authService: AuthService by inject()
     private val context: Context by inject()
 
-    private var description by mutableStateOf("")
     private var photoUri by mutableStateOf<Uri?>(null)
-    private var locationCaught by mutableStateOf("")
-    private var weight by mutableStateOf<Int?>(null)
-    private var height by mutableStateOf<Int?>(null)
-    private var length by mutableStateOf<Int?>(null)
-    private var fishSpecies by mutableStateOf<String?>(null)
     private val createPostRepo: CreatePostRepository = CreatePostRepository(httpClient, authService, context)
 
 
@@ -129,7 +123,7 @@ class CreatePost(navController: NavController): ComponentActivity() {
                     AsyncImage(
                         imageLoader = imageLoader,
                         model = ImageRequest.Builder(LocalContext.current).data(photoUri).scale(Scale.FIT).crossfade(true).build(),
-                        contentDescription = description,
+                        contentDescription = "Image picker",
                         onError = {it ->
                             Log.d("asyncImageError", it.toString())
                         },
@@ -142,8 +136,8 @@ class CreatePost(navController: NavController): ComponentActivity() {
                 Row(modifier = modifier.padding(0.dp, 20.dp, 0.dp, 0.dp)) {
                     HooksetInput(
                         modifier = modifier,
-                        inputValue = description,
-                        onChange = { description = it },
+                        inputValue = createPostRepo.description,
+                        onChange = { createPostRepo.description = it },
                         hidden = false,
                         multiLined = 10,
                         minLines = 6,
@@ -152,20 +146,22 @@ class CreatePost(navController: NavController): ComponentActivity() {
                 }
 
                 Row(modifier = modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)) {
-                    HooksetInput(
-                        modifier = modifier,
-                        inputValue = description,
-                        onChange = { fishSpecies = it },
-                        hidden = false,
-                        labelText = "What type of fish was caught?"
-                    )
+                    createPostRepo.fishSpecies?.let {
+                        HooksetInput(
+                            modifier = modifier,
+                            inputValue = it,
+                            onChange = { createPostRepo.fishSpecies = it },
+                            hidden = false,
+                            labelText = "What type of fish was caught?"
+                        )
+                    }
                 }
 
                 Row(modifier = modifier.padding(0.dp, 12.dp, 0.dp, 0.dp)) {
                     HooksetInput(
                         modifier = modifier,
-                        inputValue = description,
-                        onChange = { locationCaught = it },
+                        inputValue = createPostRepo.locationCaught,
+                        onChange = { createPostRepo.locationCaught = it },
                         hidden = false,
                         labelText = "Where was this caught?"
                     )
@@ -183,8 +179,8 @@ class CreatePost(navController: NavController): ComponentActivity() {
                     Box(modifier = modifier.width(180.dp)) {
                         HooksetInput(
                             modifier = modifier,
-                            inputValue = description,
-                            onChange = { weight = it.toInt() },
+                            inputValue = createPostRepo.weight.toString(),
+                            onChange = { createPostRepo.weight = it.toInt() },
                             hidden = false,
                             numInput = true
                         )
@@ -201,8 +197,26 @@ class CreatePost(navController: NavController): ComponentActivity() {
                     Box(modifier = modifier.width(180.dp)) {
                         HooksetInput(
                             modifier = modifier,
-                            inputValue = description,
-                            onChange = { height = it.toInt() },
+                            inputValue = createPostRepo.height.toString(),
+                            onChange = { createPostRepo.height = it.toInt() },
+                            hidden = false,
+                            numInput = true
+                        )
+                    }
+                }
+                Row(
+                    modifier = modifier
+                        .padding(0.dp, 12.dp, 0.dp, 0.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = "Height", fontSize = 20.sp)
+                    Box(modifier = modifier.width(180.dp)) {
+                        HooksetInput(
+                            modifier = modifier,
+                            inputValue = createPostRepo.length.toString(),
+                            onChange = { createPostRepo.length = it.toInt() },
                             hidden = false,
                             numInput = true
                         )
